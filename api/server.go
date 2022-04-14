@@ -40,6 +40,11 @@ func NewServer() *Server {
 	server.Use(middleware.Logger())
 	server.Use(middleware.Recover())
 
+	server.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
+
 	authEnforcer, err := casbin.NewEnforcer("auth_model.conf", "policy.csv")
 	if err != nil {
 		log.Fatal(err)
