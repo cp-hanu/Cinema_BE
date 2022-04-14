@@ -22,7 +22,7 @@ func createRandomSchedule(t *testing.T) Schedule {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	end := utils.AddTime(start, runtime)
+	end := utils.AddTime(start, int32(runtime))
 	arg := CreateNewScheduleParams{
 		ScheduleID: utils.RandomID("S", 5),
 		MovieID:    newMovie.MovieID,

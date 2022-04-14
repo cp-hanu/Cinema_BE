@@ -49,6 +49,17 @@ func (q *Queries) CreateScheduleTier(ctx context.Context, arg CreateScheduleTier
 	return i, err
 }
 
+const deleteTierByTierID = `-- name: DeleteTierByTierID :exec
+DELETE
+FROM "Tier"
+WHERE tier_id = $1
+`
+
+func (q *Queries) DeleteTierByTierID(ctx context.Context, tierID string) error {
+	_, err := q.db.ExecContext(ctx, deleteTierByTierID, tierID)
+	return err
+}
+
 const getAllTier = `-- name: GetAllTier :many
 SELECT id, tier_id, tier_name
 FROM "Tier"
@@ -75,6 +86,19 @@ func (q *Queries) GetAllTier(ctx context.Context) ([]Tier, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const getTierById = `-- name: GetTierById :one
+SELECT id, tier_id, tier_name
+FROM "Tier"
+WHERE tier_id = $1
+`
+
+func (q *Queries) GetTierById(ctx context.Context, tierID string) (Tier, error) {
+	row := q.db.QueryRowContext(ctx, getTierById, tierID)
+	var i Tier
+	err := row.Scan(&i.ID, &i.TierID, &i.TierName)
+	return i, err
 }
 
 const updateTierPrice = `-- name: UpdateTierPrice :one

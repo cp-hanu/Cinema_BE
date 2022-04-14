@@ -7,6 +7,16 @@ RETURNING *;
 SELECT *
 FROM "Tier";
 
+-- name: GetTierById :one
+SELECT *
+FROM "Tier"
+WHERE tier_id = $1;
+
+-- name: DeleteTierByTierID :exec
+DELETE
+FROM "Tier"
+WHERE tier_id = $1;
+
 -- name: CreateScheduleTier :one
 INSERT INTO "Schedule_Tier"(schedule_id, tier_id, price)
 VALUES ($1, $2, $3)
